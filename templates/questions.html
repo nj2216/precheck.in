@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pre-Consultation Questions</title>
+</head>
+<body>
+    <h2>Answer the following questions</h2>
+    <form method="POST">
+        {% for question in questions %}
+            <label>{{ question }}<br>
+                <input type="text" name="q{{ loop.index0 }}" required>
+            </label><br><br>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
