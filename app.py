@@ -32,14 +32,18 @@ def init_db():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS patients (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT,
-                age INTEGER,
-                gender TEXT,
-                symptoms TEXT,
-                questions TEXT,
-                answers TEXT,
-                token INTEGER,
-                time TEXT,
+                name TEXT NOT NULL,
+                dob TEXT NOT NULL,
+                email TEXT NULL,
+                mobile TEXT NOT NULL,
+                gender TEXT NOT NULL,
+                blood_group TEXT NOT NULL,
+                aadhar_number TEXT NOT NULL,
+                reason TEXT NOT NULL,
+                questions TEXT,            -- Optional, if you want to store questionnaire
+                answers TEXT,              -- Optional, if you want to store answers
+                token INTEGER,             -- Auto-assigned token number for queueing
+                time TEXT DEFAULT CURRENT_TIMESTAMP,
                 seen INTEGER DEFAULT 0,
                 doctor_notes TEXT DEFAULT ''
             )
@@ -101,20 +105,66 @@ def home():
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
-        if request.method != 'POST':
-            return render_template('personal.html')
-        name = request.form['name']
-        dob = request.form['dob']
-        age = datetime.now().year - int(dob.split('-')[0])
-        gender = request.form['cars']
-        symptoms = request.form['reason'].lower()
-        session['temp_patient'] = {
-            'name': name,
-            'age': age,
-            'gender': gender,
-            'symptoms': symptoms
-        }
-        return redirect(url_for('questions'))
+    if request.method != 'POST':
+        return render_template('personal.html')
+    name = request.form['name']
+    dob = request.form['dob']
+    email = request.form['email']
+    mobile = request.form['mobile']
+    gender = request.form['cars']
+    blood_group = request.form['blood_group']
+    aadhar_number = request.form['aadharNum']
+    reason = request.form['reason'].lower()
+    # Store in session for questions page
+    session['temp_patient'] = {
+        'name': name,
+        'dob': dob,
+        'email': email,
+        'mobile': mobile,
+        'gender': gender,
+        'blood_group': blood_group,
+        'aadhar_number': aadhar_number,
+        'reason': reason
+    }
+    # Insert into DB with minimal info (questions/answers will be updated later)
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT MAX(token) FROM patients")
+    last_token = cursor.fetchone()[0] or 0
+    token = last_token + 1
+    cursor.execute('''INSERT INTO patients 
+        (name, dob, email, mobile, gender, blood_group, aadhar_number, reason, token, time) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+        (name, dob, email, mobile, gender, blood_group, aadhar_number, reason, token, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    db.commit()
+    session['current_token'] = token
+    return redirect(url_for('questions'))
+
+@app.route('/edit_submit/<int:token>', methods=['GET', 'POST'])
+def edit_submit(token):
+    db = get_db()
+    cursor = db.cursor()
+    if request.method == 'GET':
+        patient = cursor.execute("SELECT * FROM patients WHERE token=?", (token,)).fetchone()
+        if not patient:
+            return "Patient not found", 404
+        return render_template('edit-personal.html', person=patient)
+    # POST: update patient info
+    name = request.form['name']
+    dob = request.form['dob']
+    email = request.form['email']
+    mobile = request.form['mobile']
+    gender = request.form['cars']
+    blood_group = request.form['blood_group']
+    aadhar_number = request.form['aadharNum']
+    reason = request.form['reason'].lower()
+    cursor.execute('''UPDATE patients SET
+        name=?, dob=?, email=?, mobile=?, gender=?, blood_group=?, aadhar_number=?, reason=?
+        WHERE token=?''',
+        (name, dob, email, mobile, gender, blood_group, aadhar_number, reason, token))
+    db.commit()
+    return redirect(url_for('queue_page'))
+
 
 @app.route('/questions', methods=['GET', 'POST'])
 def questions():
@@ -136,10 +186,8 @@ def questions():
         cursor.execute("SELECT MAX(token) FROM patients")
         last_token = cursor.fetchone()[0] or 0
         token = last_token + 1
-        cursor.execute('''INSERT INTO patients (name, age, gender, symptoms, questions, answers, token, time) 
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
-                       (patient['name'], patient['age'], patient['gender'], patient['symptoms'],
-                        '|'.join(questions_list), '|'.join(answers), token, datetime.now().strftime("%H:%M:%S")))
+        cursor.execute('''UPDATE patients SET questions=?, answers=? WHERE token=?''',
+                   ('|'.join(questions_list), '|'.join(answers), session.get('current_token')))
         db.commit()
         return redirect(url_for('queue_page'))
 
@@ -147,7 +195,9 @@ def questions():
 def queue_page():
     db = get_db()
     cursor = db.cursor()
+    # Get all patients who are not yet seen, ordered by token (queue)
     queue = cursor.execute("SELECT * FROM patients WHERE seen=0 ORDER BY token ASC").fetchall()
+    # Get all patients who have been seen, ordered by token
     seen = cursor.execute("SELECT * FROM patients WHERE seen=1 ORDER BY token ASC").fetchall()
     return render_template('queue.html', queue=queue, seen=seen)
 
