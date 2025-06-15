@@ -158,16 +158,15 @@ def edit_submit(token):
     age = datetime.now().year - int(dob.split('-')[0])  # Calculate age from dob
     email = request.form['email']
     mobile = request.form['mobile']
-    gender = request.form['cars']
+    gender = request.form['gender']
     blood_group = request.form['blood_group']
     aadhar_number = request.form['aadharNum']
-    reason = request.form['reason'].lower()
     cursor.execute('''UPDATE patients SET
-        name=?, dob=?, age=?, email=?, mobile=?, gender=?, blood_group=?, aadhar_number=?, reason=?
+        name=?, dob=?, age=?, email=?, mobile=?, gender=?, blood_group=?, aadhar_number=?
         WHERE token=?''',
-        (name, dob, age, email, mobile, gender, blood_group, aadhar_number, reason, token))
+        (name, dob, age, email, mobile, gender, blood_group, aadhar_number, token))
     db.commit()
-    return redirect(url_for('queue_page'))
+    return redirect(url_for('token_page', token=token))
 
 
 @app.route('/questions', methods=['GET', 'POST'])
@@ -193,7 +192,17 @@ def questions():
         cursor.execute('''UPDATE patients SET questions=?, answers=? WHERE token=?''',
                    ('|'.join(questions_list), '|'.join(answers), session.get('current_token')))
         db.commit()
+        return redirect(url_for('token_page', token=token-1))
         return redirect(url_for('queue_page'))
+    
+@app.route('/token/<int:token>')
+def token_page(token):
+    db = get_db()
+    cursor = db.cursor()
+    patient = cursor.execute("SELECT * FROM patients WHERE token=?", (token,)).fetchone()
+    if not patient:
+        return "Patient not found", 404
+    return render_template('token.html', patient=patient)
 
 @app.route('/queue')
 def queue_page():

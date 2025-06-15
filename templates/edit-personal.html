@@ -13,7 +13,7 @@
 <body>
     <div class="whole">
         <div class="container" id="personaldetails">
-            <form class="form" method="post" action="{{ url_for('edit_submit', token=person.id) }}"></form>
+            <form class="form" method="post" action="{{ url_for('edit_submit', token=person.id) }}">
                 <span class="form-head">Edit Personal Details</span>
                 <div class="form-row">
                     <div class="form-group">
@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label for="dob">Date of Birth</label>
-                        <input type="date" id="dob" name="dob" required value="{{ person.dob|strftime('%Y-%m-%d') if person.dob }}">
+                        <input type="date" id="dob" name="dob" required value="{{ person.dob }}">
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
@@ -59,11 +59,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="aadharNum">Aadhar Number</label>
-                        <input type="number" id="aadharNum" name="aadharNum" placeholder="Enter Aadhar Number" required value="{{ person.aadharNum }}">
+                        <input type="number" id="aadharNum" name="aadharNum" placeholder="Enter Aadhar Number" required value="{{ person.aadhar_number }}">
                     </div>
                     <div class="form-group">
                         <label for="reason">Reason</label>
-                        <input type="text" id="reason" name="reason" placeholder="Enter reason" disabled value="{{ person.reason }}">
+                        <input type="text" id="reason" name="reasoasn" placeholder="Enter reason" disabled value="{{ person.reason }}">
                     </div>
                 </div>
                 <button class="register-button" type="submit">update</button>
