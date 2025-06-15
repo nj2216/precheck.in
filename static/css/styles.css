@@ -185,6 +185,7 @@ select{
 	border: #695BF4 3px solid;
 	background: #695BF4;
 	color: white;
+    cursor: pointer;
 }
 
 .register-button:hover {
@@ -258,6 +259,7 @@ select{
     justify-content: center;
     gap: 16px;
     border-radius: 8px;
+    cursor: pointer;
 }
 
 .edit-answers span, .edit-answers i, .edit-personal span, .edit-personal i{
@@ -291,7 +293,6 @@ select{
     color: white;
     padding: 10px 20px;
     border-radius: 8px;
-    
     display: flex;
     
 }

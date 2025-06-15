@@ -80,7 +80,7 @@ def generate_questions_ai(symptom_desc):
     if res.status_code == 200:
         try:
             output_text = res.json()["choices"][0]["text"]
-            questions = [line.strip("•-1234567890. ").strip() for line in output_text.strip().split("\n") if line.strip()]
+            questions = [line.strip("•*-1234567890. ").strip() for line in output_text.strip().split("\n") if line.strip()]
             return questions[:5] if len(questions) >= 5 else questions + ["(More needed)"] * (5 - len(questions))
         except Exception as e:
             print("Parsing error:", e)

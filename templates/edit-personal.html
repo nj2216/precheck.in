@@ -11,8 +11,7 @@
     <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="whole">
-        <div class="container" id="personaldetails">
+        <div class="container margin-up" id="personaldetails">
             <form class="form" method="post" action="{{ url_for('edit_submit', token=person.id) }}">
                 <span class="form-head">Edit Personal Details</span>
                 <div class="form-row">
@@ -69,7 +68,6 @@
                 <button class="register-button" type="submit">update</button>
             </form>
         </div>
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
