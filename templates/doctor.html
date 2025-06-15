@@ -3,74 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename="css/styles.css")}}">
+    <title>Doctor Console</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    
-    <div class="whole"></div>
+
+    <div class="whole">
+        {% if patient %}
         <div class="doctor-head">
-            <span>Now viewing: Token #6</span>
+            <span>Now viewing: Token #{{ patient['token'] }}</span>
 
             <div class="container" id="personaldetails">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name">Full Name</label>
-                        <input type="text" id="name" name="name" Value="Full Name" disabled>
+                        <input type="text" id="name" name="name" value="{{ patient['name'] }}" disabled>
                     </div>
                     <div class="form-group">
                         <label for="age">Age</label>
-                        <input type="number" id="age" name="age" value = "86" disabled>
+                        <input type="number" id="age" name="age" value="{{ patient['age'] if patient['age'] is defined else '' }}" disabled>
                     </div>
                     <div class="form-group">
                         <label for="gender">Gender</label>
-                        <select class="field" name="cars" id="gender" disabled>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Others">Others</option>
+                        <select class="field" id="gender" disabled>
+                            <option value="Male" {% if patient['gender'] == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if patient['gender'] == 'Female' %}selected{% endif %}>Female</option>
+                            <option value="Others" {% if patient['gender'] == 'Others' %}selected{% endif %}>Others</option>
                         </select>
                     </div>
                 </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="reason">Reason</label>
-                        <input type="text" id="reason" name="reason" value="Sickness" disabled>
+                        <input type="text" id="reason" name="reason" value="{{ patient['symptoms'] }}" disabled>
                     </div>
                 </div>
             </div>
 
             <div class="container" id="questionaire">
-                <span class="form-head">Answers provided by Gowtham</span>
+                <span class="form-head">Answers provided by {{ patient['name'] }}</span>
+                {% for q, a in qa_pairs %}
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="question">When was the last time you pooped?</label>
-                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
+                        <label for="question"><strong>Q:</strong> {{ q }}</label>
+                        <input type="text" value="{{ a }}" disabled>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="question">Who is favourite pop artist</label>
-                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="question">Who was your first love? give reason?</label>
-                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="question">Name your top 5 favourite series names</label>
-                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="question">Name a person in your class whom you secretly hate:</label>
-                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
 
             <div class="container margin-bottom" id="notes">
@@ -81,15 +62,20 @@
                             <textarea name="notes" placeholder="Enter your consultation notes here..."></textarea>
                         </div>
                     </div>
-                    
+
                     <input type="hidden" name="token" value="{{ patient['token'] }}">
                     <button type="submit" class="register-button">Mark as Seen</button>
                 </form>
             </div>
-
+        </div>
+        {% else %}
+        <div class="doctor-head">
+            <h3>No patients in queue.</h3>
+        </div>
+        {% endif %}
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
-    <script src="{{ url_for('static', filename="js/script.js")}}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
