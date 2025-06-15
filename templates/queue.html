@@ -12,7 +12,8 @@
     
 
         <div class="doctor-head margin-up margin-bottom">
-            <span>Waiting Patients</span>
+
+            {% if queue|length > 0 %}<span>Waiting Patients</span>{% endif %}
             {% for patient in queue %}
             <div class="queuecontainer">
                 <div class="form-row">
@@ -35,8 +36,8 @@
             </div>
             {% endfor %}
 
+            {% if seen|length > 0 %}<span style="margin-top: 20px;">Seen Patients</span>{% endif %}
 
-            <span style="margin-top: 20px;">Seen Patients</span>
             {% for patient in seen %}
             <div class="queuecontainer">
                 <div class="form-row">
