@@ -281,6 +281,10 @@ select{
     color: #505050;
 }
 
+li{
+    cursor: pointer;
+}
+
 .none{
     display: none;
 }
