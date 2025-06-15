@@ -1,17 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Pre-Consultation Questions</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/styles.css")}}">
+    <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h2>Answer the following questions</h2>
-    <form method="POST">
-        {% for question in questions %}
-            <label>{{ question }}<br>
-                <input type="text" name="q{{ loop.index0 }}" required>
-            </label><br><br>
-        {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
+    
+    <div class="whole">
+
+        <div class="container" id="questionaire">
+            <form class="form" method="post">
+                <span class="form-head">Answer these questions</span>
+                {% for question in questions %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="q{{ loop.index0 }}">{{ question }}</label>
+                        <input type="text" id="q{{ loop.index0 }}" name="q{{ loop.index0 }}" placeholder="Enter your answer" required>
+                    </div>
+                </div>
+                {% endfor %}
+                <button class="register-button" type="submit">submit</button>
+            </form>
+        </div>
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
+    <script src="{{ url_for('static', filename="js/script.js")}}"></script>
 </body>
 </html>

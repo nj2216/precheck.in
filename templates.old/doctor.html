@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Console</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .qa-box { margin-bottom: 20px; }
+        .qa-box div { margin: 5px 0; }
+        textarea { width: 100%; height: 100px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    {% if patient %}
+        <h2>Now Consulting: Token #{{ patient['token'] }}</h2>
+        <p><strong>Name:</strong> {{ patient['name'] }} ({{ patient['age'] }} yrs, {{ patient['gender'] }})</p>
+        <p><strong>Symptoms:</strong> {{ patient['symptoms'] }}</p>
+
+        <div class="qa-box">
+            <h3>Pre-Consultation Questions & Answers</h3>
+            {% for q, a in qa_pairs %}
+                <div>
+                    <strong>Q:</strong> {{ q }}<br>
+                    <strong>A:</strong> {{ a }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <form method="POST">
+            <label for="notes"><strong>Doctor Notes:</strong></label><br>
+            <textarea name="notes" placeholder="Enter your consultation notes here..."></textarea><br>
+            <input type="hidden" name="token" value="{{ patient['token'] }}">
+            <button type="submit">Mark as Seen</button>
+        </form>
+    {% else %}
+        <h3>No patients in queue.</h3>
+    {% endif %}
+</body>
+</html>

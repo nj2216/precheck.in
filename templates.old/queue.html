@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Queue</title>
+</head>
+<body>
+    <h2>Waiting Patients</h2>
+    <ul>
+        {% for patient in queue %}
+            <li>#{{ patient.token }} - {{ patient.name }} ({{ patient.symptoms }})</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Seen Patients</h2>
+    <ul>
+        {% for patient in seen %}
+            <li>#{{ patient.token }} - {{ patient.name }} ({{ patient.symptoms }}) ✅</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

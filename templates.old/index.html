@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PHC Pre-Consultation</title>
+</head>
+<body>
+    <h2>Enter Patient Details</h2>
+    <form method="POST" action="/submit">
+        <label>Name: <input type="text" name="name" required></label><br>
+        <label>Age: <input type="number" name="age" required></label><br>
+        <label>Gender: 
+            <select name="gender">
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+        </label><br>
+        <label>Describe Symptoms: <input type="text" name="symptoms" required></label><br>
+        <button type="submit">Continue</button>
+    </form>
+</body>
+</html>

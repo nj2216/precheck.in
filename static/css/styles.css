@@ -95,6 +95,16 @@ input{
 	max-width: 1000px;
 	width: 80%;
 }
+.queuecontainer {
+	place-self: center;
+	align-self: center;
+	margin-top: 20px;
+	background: white;
+	padding: 30px 40px;
+	border-radius: 12px;
+	max-width: 1000px;
+	width: 100%;
+}
 
 .form-head{
     font-size: 24px;

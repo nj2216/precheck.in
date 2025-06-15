@@ -62,7 +62,7 @@ def generate_questions_ai(symptom_desc):
     }
 
     data = {
-        "model": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+        "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
         "prompt": prompt,
         "max_tokens": 256,
         "temperature": 0.7,
@@ -91,23 +91,30 @@ symptom_questions = {
     # unchanged to save space, assumed present
 }
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        print("Form submitted")
+        print(request.form)
+        return redirect(url_for('submit'))
     return render_template('index.html')
 
-@app.route('/submit', methods=['POST'])
+@app.route('/submit', methods=['GET', 'POST'])
 def submit():
-    name = request.form['name']
-    age = request.form['age']
-    gender = request.form['gender']
-    symptoms = request.form['symptoms'].lower()
-    session['temp_patient'] = {
-        'name': name,
-        'age': age,
-        'gender': gender,
-        'symptoms': symptoms
-    }
-    return redirect(url_for('questions'))
+        if request.method != 'POST':
+            return render_template('personal.html')
+        name = request.form['name']
+        dob = request.form['dob']
+        age = datetime.now().year - int(dob.split('-')[0])
+        gender = request.form['cars']
+        symptoms = request.form['reason'].lower()
+        session['temp_patient'] = {
+            'name': name,
+            'age': age,
+            'gender': gender,
+            'symptoms': symptoms
+        }
+        return redirect(url_for('questions'))
 
 @app.route('/questions', methods=['GET', 'POST'])
 def questions():

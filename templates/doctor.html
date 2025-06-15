@@ -1,38 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Doctor Console</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .qa-box { margin-bottom: 20px; }
-        .qa-box div { margin: 5px 0; }
-        textarea { width: 100%; height: 100px; margin-top: 10px; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/styles.css")}}">
+    <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    {% if patient %}
-        <h2>Now Consulting: Token #{{ patient['token'] }}</h2>
-        <p><strong>Name:</strong> {{ patient['name'] }} ({{ patient['age'] }} yrs, {{ patient['gender'] }})</p>
-        <p><strong>Symptoms:</strong> {{ patient['symptoms'] }}</p>
+    
+    <div class="whole"></div>
+        <div class="doctor-head">
+            <span>Now viewing: Token #6</span>
 
-        <div class="qa-box">
-            <h3>Pre-Consultation Questions & Answers</h3>
-            {% for q, a in qa_pairs %}
-                <div>
-                    <strong>Q:</strong> {{ q }}<br>
-                    <strong>A:</strong> {{ a }}
+            <div class="container" id="personaldetails">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" Value="Full Name" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" value = "86" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select class="field" name="cars" id="gender" disabled>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
                 </div>
-            {% endfor %}
-        </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reason">Reason</label>
+                        <input type="text" id="reason" name="reason" value="Sickness" disabled>
+                    </div>
+                </div>
+            </div>
 
-        <form method="POST">
-            <label for="notes"><strong>Doctor Notes:</strong></label><br>
-            <textarea name="notes" placeholder="Enter your consultation notes here..."></textarea><br>
-            <input type="hidden" name="token" value="{{ patient['token'] }}">
-            <button type="submit">Mark as Seen</button>
-        </form>
-    {% else %}
-        <h3>No patients in queue.</h3>
-    {% endif %}
+            <div class="container" id="questionaire">
+                <span class="form-head">Answers provided by Gowtham</span>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="question">When was the last time you pooped?</label>
+                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="question">Who is favourite pop artist</label>
+                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="question">Who was your first love? give reason?</label>
+                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="question">Name your top 5 favourite series names</label>
+                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="question">Name a person in your class whom you secretly hate:</label>
+                        <input type="text" id="question" name="question" placeholder="Enter your answer" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container margin-bottom" id="notes">
+                <form method="POST">
+                    <div class="form-row no-margin">
+                        <div class="form-group">
+                            <label for="notes">Doctor Notes:</label>
+                            <textarea name="notes" placeholder="Enter your consultation notes here..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" name="token" value="{{ patient['token'] }}">
+                    <button type="submit" class="register-button">Mark as Seen</button>
+                </form>
+            </div>
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
+    <script src="{{ url_for('static', filename="js/script.js")}}"></script>
 </body>
 </html>
