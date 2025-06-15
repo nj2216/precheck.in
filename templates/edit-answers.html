@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/styles.css")}}">
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.png') }}" type="image/x-icon">
+    <title>Edit Answers - Precheck.in</title>
+    <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <div class="whole">
+        <div class="container" id="questionaire">
+            <form class="form" method="post">
+                <span class="form-head">Edit your answers</span>
+                {% for question in questions %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="q{{ loop.index0 }}">{{ question }}</label>
+                        <input type="text" id="q{{ loop.index0 }}" name="q{{ loop.index0 }}" placeholder="Enter your answer" required value="{{ answers[loop.index0] if answers is defined else '' }}">
+                    </div>
+                </div>
+                {% endfor %}
+                <button class="register-button" type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
+    <script src="{{ url_for('static', filename="js/script.js")}}"></script>
+</body>
+</html>

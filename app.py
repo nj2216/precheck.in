@@ -194,7 +194,31 @@ def questions():
         db.commit()
         return redirect(url_for('token_page', token=token-1))
         return redirect(url_for('queue_page'))
-    
+
+@app.route('/edit_answers/<int:token>', methods=['GET', 'POST'])
+def edit_answers(token):
+    db = get_db()
+    cursor = db.cursor()
+    if request.method == 'GET':
+        patient = cursor.execute("SELECT * FROM patients WHERE token=?", (token,)).fetchone()
+        if not patient:
+            return "Patient not found", 404
+        questions = patient['questions'].split('|') if patient['questions'] else []
+        answers = patient['answers'].split('|') if patient['answers'] else []
+        return render_template('edit-answers.html', patient=patient, questions=questions, answers=answers)
+    else:
+        # Get the original questions
+        patient = cursor.execute("SELECT * FROM patients WHERE token=?", (token,)).fetchone()
+        if not patient:
+            return "Patient not found", 404
+        questions = patient['questions'].split('|') if patient['questions'] else []
+        # Collect edited answers from form fields named q0, q1, ...
+        answers = [request.form.get(f'q{i}', '') for i in range(len(questions))]
+        cursor.execute('''UPDATE patients SET answers=? WHERE token=?''',
+                   ('|'.join(answers), token))
+        db.commit()
+        return redirect(url_for('token_page', token=token))
+
 @app.route('/token/<int:token>')
 def token_page(token):
     db = get_db()
