@@ -13,6 +13,7 @@ body {
 }
 .whole {
     width: 100vw;
+    min-height: (100vh, 2000vh);
     margin-bottom: 100px;
     display: flex;
     justify-content: center;
@@ -21,6 +22,10 @@ body {
 
 .search-and-res{
     margin-top: 200px;
+    
+}
+
+.search-form{
     width: fit-content;
     height: fit-content;
     display: flex;
@@ -103,7 +108,7 @@ input{
 	padding: 30px 40px;
 	border-radius: 12px;
 	max-width: 1000px;
-	width: 100%;
+	width: 80%;
 }
 
 .form-head{
@@ -286,4 +291,8 @@ select{
 
 .margin-bottom{
     margin-bottom: 100px;
+}
+
+.margin-up{
+    margin-top: 100px;
 }

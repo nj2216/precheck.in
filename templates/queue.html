@@ -8,8 +8,8 @@
 </head>
 <body>
     
-    <div class="whole"></div>
-        <div class="doctor-head margin-bottom">
+
+        <div class="doctor-head margin-up margin-bottom">
             <span>Waiting Patients</span>
             {% for patient in queue %}
             <div class="queuecontainer">
@@ -56,7 +56,8 @@
                 </div>
             </div>
         {% endfor %}
-    </div>
+        </div>
+    
     
     <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
     <script src="{{ url_for('static', filename="js/script.js")}}"></script>
