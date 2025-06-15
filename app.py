@@ -34,6 +34,7 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 dob TEXT NOT NULL,
+                age INTEGER NOT NULL,  -- Optional, can be calculated from dob
                 email TEXT NULL,
                 mobile TEXT NOT NULL,
                 gender TEXT NOT NULL,
@@ -109,6 +110,7 @@ def submit():
         return render_template('personal.html')
     name = request.form['name']
     dob = request.form['dob']
+    age = datetime.now().year - int(dob.split('-')[0])
     email = request.form['email']
     mobile = request.form['mobile']
     gender = request.form['cars']
@@ -119,6 +121,7 @@ def submit():
     session['temp_patient'] = {
         'name': name,
         'dob': dob,
+        'age': age,  # Calculate age from dob
         'email': email,
         'mobile': mobile,
         'gender': gender,
@@ -133,9 +136,9 @@ def submit():
     last_token = cursor.fetchone()[0] or 0
     token = last_token + 1
     cursor.execute('''INSERT INTO patients 
-        (name, dob, email, mobile, gender, blood_group, aadhar_number, reason, token, time) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-        (name, dob, email, mobile, gender, blood_group, aadhar_number, reason, token, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+        (name, dob, age, email, mobile, gender, blood_group, aadhar_number, reason, token, time) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+        (name, dob, age, email, mobile, gender, blood_group, aadhar_number, reason, token, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     db.commit()
     session['current_token'] = token
     return redirect(url_for('questions'))
@@ -152,6 +155,7 @@ def edit_submit(token):
     # POST: update patient info
     name = request.form['name']
     dob = request.form['dob']
+    age = datetime.now().year - int(dob.split('-')[0])  # Calculate age from dob
     email = request.form['email']
     mobile = request.form['mobile']
     gender = request.form['cars']
@@ -159,9 +163,9 @@ def edit_submit(token):
     aadhar_number = request.form['aadharNum']
     reason = request.form['reason'].lower()
     cursor.execute('''UPDATE patients SET
-        name=?, dob=?, email=?, mobile=?, gender=?, blood_group=?, aadhar_number=?, reason=?
+        name=?, dob=?, age=?, email=?, mobile=?, gender=?, blood_group=?, aadhar_number=?, reason=?
         WHERE token=?''',
-        (name, dob, email, mobile, gender, blood_group, aadhar_number, reason, token))
+        (name, dob, age, email, mobile, gender, blood_group, aadhar_number, reason, token))
     db.commit()
     return redirect(url_for('queue_page'))
 
@@ -169,7 +173,7 @@ def edit_submit(token):
 @app.route('/questions', methods=['GET', 'POST'])
 def questions():
     if request.method == 'GET':
-        symptoms = session.get('temp_patient', {}).get('symptoms', '')
+        symptoms = session.get('temp_patient', {}).get('reason', '')
         keyword = next((key for key in symptom_questions if key in symptoms), None)
         if keyword:
             questions_list = symptom_questions.get(keyword, [])
