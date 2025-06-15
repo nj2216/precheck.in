@@ -273,12 +273,38 @@ select{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .doctor-head span{
     font-size: 24px;
     font-weight: 600;
     color: #505050;
+}
+
+.notif{
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    background-color: #695BF4;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    
+    display: flex;
+    
+}
+
+.notif span{
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.notif i{
+    color: white;
+    font-size: 18px;
 }
 
 li{
