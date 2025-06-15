@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <div class="whole">
+        <div class="container" id="personaldetails">
+            <form class="form" method="post">
+                <span class="form-head">Edit Personal Details</span>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter email" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mobile">Mobile Number</label>
+                        <input type="tel" id="mobile" name="mobile" placeholder="Enter mobile number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select class="field" name="cars" id="gender" >
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodGroup">Blood Group</label>
+                        <select class="field" name="blood_group" id="bloodGroup" >
+                            <option value="A+">A+</option>
+                            <option value="A-">A−</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B−</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB−</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O−</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="aadharNum">Aadhar Number</label>
+                        <input type="number" id="aadharNum" name="aadharNum" placeholder="Enter Aadhar Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">Reason</label>
+                        <input type="text" id="resaon" name="reason" placeholder="Enter reason" disabled>
+                    </div>
+                </div>
+                <button class="register-button" type="submit">register</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
